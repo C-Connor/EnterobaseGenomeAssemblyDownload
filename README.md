@@ -11,3 +11,11 @@ Instructions for creating the download file from enterobase required by this scr
 3. Ensure that 'Experimental Data' in the top right corner, is set to 'Assembly Stats'.
 4. Download the text file by selecting 'Data > Save to Local File'.
 5. The resulting text file should contain columns corresponding to those on enterobase. There should also be a column called 'Assembly Barcode'.
+
+## Input
+This script requires a 'download list' which is to be generated following the instructions above. Please provide the path and name of the text file using the `-l` or `--download-list` flags.
+
+The script also requires that the query database be specified with the flag `-d` or `--database`. The current options are: senterica, ecoli, yersinia or mcatarrhalis. Please specify only one.
+
+## Output
+The script will download the assemblies in fasta format and save them into the specified output directory. The assemblies will be named according to their assembly barcode on Enterobase. The script will also generate two log files: "assembly_code_error_log" and "fasta_error_log". The first contains details on assemblies which could not be identified on Enterobase (e.g. an incorrect assembly code) the second log contains details of which assemblies could not be downloaded (data embargo).
