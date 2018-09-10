@@ -75,7 +75,7 @@ try:
     response = urllib2.urlopen(apiaddress)
     data = json.load(response)
     API_TOKEN = data['api_token']
-except HTTPError as Response_error:
+except urllib2.HTTPError as Response_error:
     print("Connection error ocurred:")
     print '%d %s. <%s>\n Reason: %s' %(Response_error.code, Response_error.msg, Response_error.geturl(), Response_error.read())
     sys.exit()
@@ -111,10 +111,10 @@ while count < len(assembly_codes):
                     fasta_out.write(fasta_response.read())
             else:
                 fasta_error_log.append([count, assembly_codes[count], fasta_url, fasta_response.getcode(), 'Failed download, bad server response.'])
-        except HTTPError as Response_error:
+        except urllib2.HTTPError as Response_error:
             fasta_error_log.append(['Count: '+str(count), 'Assembly code: '+str(assembly_codes[count]), 'Fasta URL: '+str(fasta_url), 'Reason:  %s, %s' %(Response_error.read(), Response_error.msg)])
             fasta_error_count = fasta_error_count + 1
-    except HTTPError as Response_error:
+    except urllib2.HTTPError as Response_error:
         assembly_error_log.append(['Count: '+str(count), 'Assembly code: '+str(assembly_codes[count]), 'Query address: '+str(address), 'Reason: %s, %s'%(Response_error.read(), Response_error.msg)])
         assembly_code_error_count = assembly_code_error_count + 1
     sys.stdout.write('\rProgress: %d out of %d' %(count, len(assembly_codes)-1))
