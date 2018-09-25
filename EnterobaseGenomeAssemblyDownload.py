@@ -103,7 +103,7 @@ def barcode_search(header_line):
 
 assembly_codes = list()
 with open(cl_args.dlist,'r') as fin:
-    header = find.readline()
+    header = fin.readline()
     indexer = barcode_search(header)
     for line in fin:
         assembly_codes.append(line.split('\t')[indexer].strip())
