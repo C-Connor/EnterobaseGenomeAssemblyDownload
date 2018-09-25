@@ -89,10 +89,25 @@ def __create_request(request_str):
     request.add_header("Authorization", "Basic %s" % base64string)
     return request
 
+#search header line for 'assembly barcode' string as sometimes it changes places
+def barcode_search(header_line):
+    count = 0
+    while count <= len(header_line.split('\t')):
+        try:
+            if header_line.split('\t')[count].strip() == 'Assembly barcode':
+                return(count)
+            else:
+                count += 1
+        except IndexError:
+            raise ValueError('Assembly barcode could not be found in header')
+
 assembly_codes = list()
 with open(cl_args.dlist,'r') as fin:
-    for line in fin.readlines():
-        assembly_codes.append(line.split('\t')[-2])
+    header = find.readline()
+    indexer = barcode_search(header)
+    for line in fin:
+        assembly_codes.append(line.split('\t')[indexer].strip())
+
 count = 1
 fasta_error_count = 0
 assembly_code_error_count = 0
