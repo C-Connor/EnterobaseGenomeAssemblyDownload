@@ -23,6 +23,10 @@ cl_parser.add_argument("-o","--output",
     help="Specify output path to save assemblies",
     default=os.getcwd()+os.sep+"Enterobase_Assemblies"+time.strftime('%Y%m%d_%H%M'),dest="output",
     type=str)
+cl_parser.add_argument("-a","--accession",
+    help="Name downloaded fasta files by accession number rather than assembly barcode",
+    action='store_true',dest="accession",
+    required=False)
 cl_parser.add_argument("--instructions",
     help="Print instructions for getting download text file and exit.",
     action='store_true',
@@ -101,12 +105,28 @@ def barcode_search(header_line):
         except IndexError:
             raise ValueError('Assembly barcode could not be found in header')
 
+#search header line for 'Data Source(Accession No.;Sequencing Platform;Sequencing Library;Insert Size;Experiment;Status)'
+def accession_search(header_line):
+    count = 0
+    while count <= len(header_line.split('\t')):
+        try:
+            if header_line.split('\t')[count].strip() == 'Data Source(Accession No.;Sequencing Platform;Sequencing Library;Insert Size;Experiment;Status)':
+                return(count)
+            else:
+                count += 1
+        except IndexError:
+            raise ValueError('Data Source (...) could not be found in header')
+
+
 assembly_codes = list()
+assembly_dict = dict()
 with open(cl_args.dlist,'r') as fin:
     header = fin.readline()
-    indexer = barcode_search(header)
+    indexer_barcode = barcode_search(header)
+    indexer_accession = accession_search(header)
     for line in fin:
-        assembly_codes.append(line.split('\t')[indexer].strip())
+        assembly_codes.append(line.split('\t')[indexer_barcode].strip())
+        assembly_dict[line.split('\t')[indexer_barcode].strip()] = line.split('\t')[indexer_accession].split(';')[0]
 
 count = 1
 fasta_error_count = 0
@@ -122,8 +142,12 @@ while count < len(assembly_codes):
         try:
             fasta_response = urllib2.urlopen(__create_request(fasta_url))
             if fasta_response.getcode() == 200:
-                with open(cl_args.output+str(assembly_codes[count])+'.fasta','w') as fasta_out:
-                    fasta_out.write(fasta_response.read())
+                if cl_args.accession:
+                    with open(cl_args.output+str(assembly_dict.get(assembly_codes[count])+'.fasta'),'w') as fasta_out:
+                        fasta_out.write(fasta_response.read())
+                else:
+                    with open(cl_args.output+str(assembly_codes[count])+'.fasta','w') as fasta_out:
+                        fasta_out.write(fasta_response.read())
             else:
                 fasta_error_log.append([count, assembly_codes[count], fasta_url, fasta_response.getcode(), 'Failed download, bad server response.'])
         except urllib2.HTTPError as Response_error:

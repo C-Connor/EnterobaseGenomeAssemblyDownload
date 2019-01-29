@@ -18,4 +18,6 @@ This script requires a 'download list' which is to be generated following the in
 The script also requires that the query database be specified with the flag `-d` or `--database`. The current options are: senterica, ecoli, yersinia or mcatarrhalis. Please specify only one.
 
 ## Output
-The script will download the assemblies in fasta format and save them into the specified output directory. The assemblies will be named according to their assembly barcode on Enterobase. The script will also generate two log files: "assembly_code_error_log" and "fasta_error_log". The first contains details on assemblies which could not be identified on Enterobase (e.g. an incorrect assembly code) the second log contains details of which assemblies could not be downloaded (data embargo).
+The script will download the assemblies in fasta format and save them into the specified output directory. The assemblies will be named according to their assembly barcode on Enterobase, unless the `-a` or `--accession` flag is specified, in which case the assemblies will be named based upon their accession number.
+
+The script will also generate two log files: "assembly_code_error_log" and "fasta_error_log". The first contains details on assemblies which could not be identified on Enterobase (e.g. an incorrect assembly code) the second log contains details of which assemblies could not be downloaded (data embargo).
