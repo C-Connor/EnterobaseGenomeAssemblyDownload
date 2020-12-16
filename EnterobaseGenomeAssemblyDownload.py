@@ -67,8 +67,8 @@ if not os.path.exists(os.path.dirname(cl_args.output)) and os.path.dirname(cl_ar
     os.makedirs(os.path.dirname(cl_args.output))
 
 #prompt for loging details
-ENTEROBASE_USERNAME = pipes.quote(raw_input("Please enter Enterobase username: "))
-ENTEROBASE_PASSWORD = pipes.quote(getpass.getpass("Please enter Enterobase password: "))
+ENTEROBASE_USERNAME = raw_input("Please enter Enterobase username: ")
+ENTEROBASE_PASSWORD = getpass.getpass("Please enter Enterobase password: ")
 
 ENTEROBASE_SERVER = 'https://enterobase.warwick.ac.uk'
 apiaddress = '%s/api/v2.0/login?username=%s&password=%s' %(ENTEROBASE_SERVER, ENTEROBASE_USERNAME, ENTEROBASE_PASSWORD)
