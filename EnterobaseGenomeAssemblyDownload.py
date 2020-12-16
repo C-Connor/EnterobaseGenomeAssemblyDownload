@@ -81,8 +81,10 @@ try:
     API_TOKEN = data['api_token']
 except urllib2.HTTPError as Response_error:
     print("Connection error ocurred:")
-    print '%d %s. <%s>\n Reason: %s' %(Response_error.code, Response_error.msg, Response_error.geturl(), Response_error.read())
+    print '%d %s.\n Reason: %s' %(Response_error.code, Response_error.msg, Response_error.read())
     sys.exit()
+
+print("Retrieved API token.")
 
 assembly_error_log = list()
 fasta_error_log = list()
