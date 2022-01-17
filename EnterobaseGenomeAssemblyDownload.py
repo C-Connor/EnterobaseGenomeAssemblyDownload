@@ -130,7 +130,7 @@ with open(cl_args.dlist,'r') as fin:
         assembly_codes.append(line.split('\t')[indexer_barcode].strip())
         assembly_dict[line.split('\t')[indexer_barcode].strip()] = line.split('\t')[indexer_accession].split(';')[0]
 
-count = 1
+count = 0
 fasta_error_count = 0
 assembly_code_error_count = 0
 while count < len(assembly_codes):
@@ -158,7 +158,7 @@ while count < len(assembly_codes):
     except urllib2.HTTPError as Response_error:
         assembly_error_log.append(['Count: '+str(count), 'Assembly code: '+str(assembly_codes[count]), 'Query address: '+str(address), 'Reason: %s, %s'%(Response_error.read(), Response_error.msg)])
         assembly_code_error_count = assembly_code_error_count + 1
-    sys.stdout.write('\rProgress: %d out of %d' %(count, len(assembly_codes)-1))
+    sys.stdout.write('\rProgress: %d out of %d' %(count+1, len(assembly_codes)))
     sys.stdout.flush()
     count = count + 1
 
